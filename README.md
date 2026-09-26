@@ -31,10 +31,11 @@ Or download a build from [Releases](https://github.com/smeltery/ember/releases).
 ## Features
 
 - Agent-driven wake lock (PreventUserIdleSystemSleep via `caffeinate` while mid-task)
-- Lifecycle hooks for Claude Code, Codex, OpenCode, and more
-- Process detection for Cursor and Cline
+- Lifecycle hooks for Claude Code, Codex, OpenCode, Gemini, Pi, Copilot CLI, Hermes
+- Process detection for Cursor, Cline, Warp, Aider, Windsurf, Continue, Amp, Goose
 - Pause 30 minutes or 1 hour from the menu bar
 - Battery cut-off, optional plugged-in-only, Low Power Mode respect
+- LOC and flat-directory budget gates in CI / pre-commit
 
 ## Docs
 

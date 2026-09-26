@@ -2,7 +2,7 @@ import "./styles.css";
 
 interface AgentLogo {
   name: string;
-  src: string;
+  src?: string;
   mode: "hooks" | "process";
 }
 
@@ -16,6 +16,12 @@ const AGENTS: AgentLogo[] = [
   { name: "Hermes", src: "/agents/agent-hermes.png", mode: "hooks" },
   { name: "Cursor", src: "/agents/agent-cursor-agent.png", mode: "process" },
   { name: "Cline", src: "/agents/agent-cline.png", mode: "process" },
+  { name: "Warp", mode: "process" },
+  { name: "Aider", mode: "process" },
+  { name: "Windsurf", mode: "process" },
+  { name: "Continue", mode: "process" },
+  { name: "Amp", mode: "process" },
+  { name: "Goose", mode: "process" },
 ];
 
 const FEATURES = [
@@ -29,7 +35,7 @@ const FEATURES = [
   },
   {
     title: "Process detection",
-    body: "Cursor and Cline are watched by process name when hooks are not available — still automatic, still hands-off.",
+    body: "Cursor, Cline, Warp, Aider, Windsurf, Continue, Amp, and Goose are watched by process name when hooks are not available.",
   },
   {
     title: "Pause when you need it",
@@ -37,11 +43,19 @@ const FEATURES = [
   },
 ];
 
+function agentMark(a: AgentLogo): string {
+  if (a.src) {
+    return `<img src="${a.src}" alt="" width="40" height="40" loading="lazy" />`;
+  }
+  const initial = a.name.slice(0, 1);
+  return `<span class="agent-mark" aria-hidden="true">${initial}</span>`;
+}
+
 function agentCells(): string {
   return AGENTS.map(
     (a, i) => `
     <li class="agent" style="--i:${i}">
-      <img src="${a.src}" alt="" width="40" height="40" loading="lazy" />
+      ${agentMark(a)}
       <div>
         <strong>${a.name}</strong>
         <span>${a.mode === "hooks" ? "lifecycle hooks" : "process detection"}</span>

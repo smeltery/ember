@@ -31,13 +31,28 @@ describe("process matching", () => {
     expect(isAgentProcess("cline", "node")).toBe(false);
   });
 
+  test("warp and aider match their processes", () => {
+    expect(isAgentProcess("warp", "Warp")).toBe(true);
+    expect(isAgentProcess("warp", "Warp.app")).toBe(true);
+    expect(isAgentProcess("aider", "aider")).toBe(true);
+    expect(isAgentProcess("aider", "python -m aider")).toBe(true);
+  });
+
+  test("amp needles avoid short false positives", () => {
+    expect(isAgentProcess("amp", "sample")).toBe(false);
+    expect(isAgentProcess("amp", "amp-cli")).toBe(true);
+    expect(isAgentProcess("amp", "/usr/local/bin/amp")).toBe(true);
+  });
+
   test("processNeedlesFor returns empty for hook agents", () => {
     expect(processNeedlesFor("claude-code")).toEqual([]);
   });
 
-  test("detectAgentFromProcess picks cursor then cline", () => {
+  test("detectAgentFromProcess picks known agents", () => {
     expect(detectAgentFromProcess("Cursor Helper")).toBe("cursor");
     expect(detectAgentFromProcess("cline")).toBe("cline");
+    expect(detectAgentFromProcess("Warp")).toBe("warp");
+    expect(detectAgentFromProcess("Windsurf")).toBe("windsurf");
     expect(detectAgentFromProcess("zsh")).toBeUndefined();
   });
 });

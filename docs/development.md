@@ -35,7 +35,7 @@ Hooks run the same entrypoints as CI:
 | Hook / script | CI job |
 | --- | --- |
 | `scripts/check-docs.sh` | docs (markdown + mermaid + links) |
-| `scripts/check-hygiene.sh` | budgets, shellcheck, actionlint |
+| `scripts/check-hygiene.sh` | loc budget, shellcheck, actionlint |
 | `scripts/check-node.sh` | tests + web build |
 | `.githooks/pre-push` | all of the above (+ Swift smoke when available) |
 

@@ -12,9 +12,10 @@
     "check:mermaid": "bun scripts/check-mermaid.ts",
     "check:doc-links": "bun scripts/check-doc-links.ts",
     "check:docs": "bun run check:markdown && bun run check:mermaid && bun run check:doc-links",
-    "check:file-sizes": "bun scripts/check-file-sizes.ts",
-    "check:flat-directories": "bun scripts/check-flat-directories.ts",
-    "check:budgets": "bun run check:file-sizes && bun run check:flat-directories",
+    "check:loc-budget": "bun scripts/check-loc-budget.ts",
+    "check:file-sizes": "bun scripts/check-loc-budget.ts",
+    "check:flat-directories": "bun scripts/check-loc-budget.ts",
+    "check:budgets": "bun run check:loc-budget",
     "check:hygiene": "bun run check:docs && bun run check:budgets",
     "ci": "bun run test && bun run build && bun run check:hygiene"
   },

@@ -9,7 +9,13 @@ export type AgentId =
   | "copilot-cli"
   | "hermes"
   | "cursor"
-  | "cline";
+  | "cline"
+  | "warp"
+  | "aider"
+  | "windsurf"
+  | "continue"
+  | "amp"
+  | "goose";
 
 export interface AgentDefinition {
   id: AgentId;
@@ -38,6 +44,42 @@ export const AGENTS: readonly AgentDefinition[] = [
     displayName: "Cline",
     detection: "process",
     processNames: ["cline", "Cline"],
+  },
+  {
+    id: "warp",
+    displayName: "Warp",
+    detection: "process",
+    processNames: ["Warp", "Warp.app"],
+  },
+  {
+    id: "aider",
+    displayName: "Aider",
+    detection: "process",
+    processNames: ["aider"],
+  },
+  {
+    id: "windsurf",
+    displayName: "Windsurf",
+    detection: "process",
+    processNames: ["Windsurf", "windsurf"],
+  },
+  {
+    id: "continue",
+    displayName: "Continue",
+    detection: "process",
+    processNames: ["Continue", "continue-dev"],
+  },
+  {
+    id: "amp",
+    displayName: "Amp",
+    detection: "process",
+    processNames: ["Amp.app", "amp-cli", "bin/amp"],
+  },
+  {
+    id: "goose",
+    displayName: "Goose",
+    detection: "process",
+    processNames: ["goose"],
   },
 ] as const;
 

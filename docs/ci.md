@@ -24,7 +24,7 @@ flowchart TD
 | TypeScript tests | `packages/core` wake / battery / hooks / agents |
 | Web build | Vite production build for `apps/web` |
 | Docs hygiene | markdown, mermaid fences, internal doc links |
-| Budgets | file size / flat directory guards when enabled |
+| Budgets | `scripts/check-loc-budget.ts` — per-file LOC + flat-directory limits |
 | Swift | `swift test` for EmberCore on macOS runners |
 
 ## Local parity

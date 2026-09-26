@@ -21,7 +21,7 @@ flowchart LR
   end
 
   H -->|"working / idle JSON"| S
-  P -->|Cursor / Cline| W
+  P -->|Cursor / Warp / others| W
   S --> W
   B --> W
   W -->|shouldHoldWake| C
@@ -34,7 +34,7 @@ flowchart LR
    write session files under Application Support.
 2. **ember** polls about every 2 seconds:
    - Loads `sessions/**/*.json`
-   - Optionally matches Cursor / Cline in `ps`
+   - Optionally matches process agents (Cursor, Warp, Aider, …) in `ps`
    - Reads battery from `pmset -g batt`
 3. **Wake decision** (shared concepts with the TypeScript core) combines
    activity, pause-until, and battery policy.

@@ -14,7 +14,16 @@ describe("agent catalog", () => {
       "copilot-cli",
       "hermes",
     ]);
-    expect(procs).toEqual(["cursor", "cline"]);
+    expect(procs).toEqual([
+      "cursor",
+      "cline",
+      "warp",
+      "aider",
+      "windsurf",
+      "continue",
+      "amp",
+      "goose",
+    ]);
   });
 
   test("every agent has a display name", () => {

@@ -16,6 +16,12 @@ detection** when hooks are unavailable.
 | Hermes | hooks | generic scripts with `EMBER_AGENT=hermes` |
 | Cursor | process | none (watched via `ps`) |
 | Cline | process | none (watched via `ps`) |
+| Warp | process | none (watched via `ps`) |
+| Aider | process | none (watched via `ps`) |
+| Windsurf | process | none (watched via `ps`) |
+| Continue | process | none (watched via `ps`) |
+| Amp | process | none (watched via `ps`) |
+| Goose | process | none (watched via `ps`) |
 
 ## Lifecycle sequence
 
@@ -52,6 +58,6 @@ Agent-native fallbacks (examples): `CLAUDE_SESSION_ID`, `CODEX_SESSION_ID`,
 
 ## Process detection
 
-Cursor and Cline do not need hooks. ember scans process command names for
-known substrings (for example `cursor-agent`, `Cline`). Presence counts as
-Working for wake decisions.
+Agents without lifecycle hooks are watched by scanning process command names for
+known substrings (for example `cursor-agent`, `Warp`, `aider`, `Windsurf`).
+Presence counts as Working for wake decisions.

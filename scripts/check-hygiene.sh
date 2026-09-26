@@ -3,8 +3,7 @@
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
-bun scripts/check-file-sizes.ts
-bun scripts/check-flat-directories.ts
+bun scripts/check-loc-budget.ts
 actionlint
 files=()
 while IFS= read -r file; do

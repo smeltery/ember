@@ -15,6 +15,12 @@ public enum AgentKind: String, Sendable, Codable, CaseIterable {
   case hermes
   case cursor
   case cline
+  case warp
+  case aider
+  case windsurf
+  case continueApp = "continue"
+  case amp
+  case goose
 
   public var displayName: String {
     switch self {
@@ -27,13 +33,21 @@ public enum AgentKind: String, Sendable, Codable, CaseIterable {
     case .hermes: "Hermes"
     case .cursor: "Cursor"
     case .cline: "Cline"
+    case .warp: "Warp"
+    case .aider: "Aider"
+    case .windsurf: "Windsurf"
+    case .continueApp: "Continue"
+    case .amp: "Amp"
+    case .goose: "Goose"
     }
   }
 
   public var detection: DetectionMode {
     switch self {
-    case .cursor, .cline: .process
-    default: .hooks
+    case .claudeCode, .chatgptCodex, .opencode, .gemini, .pi, .copilotCli, .hermes:
+      .hooks
+    case .cursor, .cline, .warp, .aider, .windsurf, .continueApp, .amp, .goose:
+      .process
     }
   }
 
@@ -42,6 +56,12 @@ public enum AgentKind: String, Sendable, Codable, CaseIterable {
     switch self {
     case .cursor: ["Cursor", "cursor-agent", "Cursor Helper"]
     case .cline: ["cline", "Cline"]
+    case .warp: ["Warp", "Warp.app"]
+    case .aider: ["aider"]
+    case .windsurf: ["Windsurf", "windsurf"]
+    case .continueApp: ["Continue", "continue-dev"]
+    case .amp: ["Amp.app", "amp-cli", "bin/amp"]
+    case .goose: ["goose"]
     default: []
     }
   }

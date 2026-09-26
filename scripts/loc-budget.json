@@ -1,4 +1,11 @@
 {
+  "default_lines": 250,
+  "files": {
+    "apps/web/src/main.ts": 340,
+    "apps/web/src/styles.css": 420,
+    "macos/Sources/Ember/StatusItemController.swift": 280,
+    "macos/Sources/Ember/PopoverView.swift": 250
+  },
   "default_files": 20,
   "directories": {
     "apps/web/public/agents": {

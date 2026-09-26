@@ -6,14 +6,18 @@ final class AgentTests: XCTestCase {
     XCTAssertEqual(AgentKind.hookAgents.count, 7)
     XCTAssertEqual(
       AgentKind.processAgents.map(\.rawValue).sorted(),
-      ["cline", "cursor"]
+      ["aider", "amp", "cline", "continue", "cursor", "goose", "warp", "windsurf"]
     )
   }
 
   func testProcessMatch() {
     XCTAssertEqual(detectAgent(fromProcessName: "cursor-agent"), .cursor)
     XCTAssertEqual(detectAgent(fromProcessName: "/Apps/Cline"), .cline)
+    XCTAssertEqual(detectAgent(fromProcessName: "Warp"), .warp)
+    XCTAssertEqual(detectAgent(fromProcessName: "aider"), .aider)
+    XCTAssertEqual(detectAgent(fromProcessName: "Windsurf"), .windsurf)
     XCTAssertNil(detectAgent(fromProcessName: "Safari"))
+    XCTAssertNil(detectAgent(fromProcessName: "sample"))
   }
 
   func testDisplayNames() {

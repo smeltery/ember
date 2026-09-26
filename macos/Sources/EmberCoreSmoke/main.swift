@@ -51,7 +51,9 @@ enum EmberCoreSmoke {
     check("session parse", snap?.isWorking == true && snap?.agent == "claude-code")
 
     check("agent cursor", detectAgent(fromProcessName: "cursor-agent") == .cursor)
+    check("agent warp", detectAgent(fromProcessName: "Warp") == .warp)
     check("hook agent count", AgentKind.hookAgents.count == 7)
+    check("process agent count", AgentKind.processAgents.count == 8)
 
     let pmset = parsePmsetBattery(
       "Now drawing from 'AC Power'\n-InternalBattery-0 95%; charged;"
