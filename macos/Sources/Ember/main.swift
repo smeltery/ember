@@ -1,4 +1,3 @@
-#if os(macOS)
 import AppKit
 
 @main
@@ -11,4 +10,3 @@ enum EmberMain {
     app.run()
   }
 }
-#endif

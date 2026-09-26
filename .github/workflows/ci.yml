@@ -35,11 +35,19 @@ jobs:
         with:
           bun-version: 1.4.2
 
+      - name: Activate flox (shellcheck + actionlint)
+        run: flox activate -- true
+
       - name: Markdown and Mermaid
-        run: flox activate -- bash scripts/check-docs.sh
+        run: |
+          # Prefer setup-bun's 1.4.2 over whatever catalog bun flox may prepend.
+          export PATH="$(dirname "$(command -v bun)"):$PATH"
+          flox activate -- bash scripts/check-docs.sh
 
       - name: Budgets, shellcheck, and actionlint
-        run: flox activate -- bash scripts/check-hygiene.sh
+        run: |
+          export PATH="$(dirname "$(command -v bun)"):$PATH"
+          flox activate -- bash scripts/check-hygiene.sh
 
   verify:
     name: verify
@@ -60,7 +68,9 @@ jobs:
           bun-version: 1.4.2
 
       - name: Tests and web build
-        run: flox activate -- bash scripts/check-node.sh
+        run: |
+          export PATH="$(dirname "$(command -v bun)"):$PATH"
+          flox activate -- bash scripts/check-node.sh
 
   macos:
     name: macos
@@ -73,7 +83,7 @@ jobs:
         working-directory: macos
         run: |
           set -euo pipefail
-          swift build --product EmberCore
+          swift build --target EmberCore
           swift build --product Ember
           swift build --product EmberCoreSmoke
           swift run EmberCoreSmoke
