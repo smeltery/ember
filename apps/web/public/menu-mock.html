@@ -23,10 +23,72 @@
         background: #000 url("./wallpaper.jpg") center / cover no-repeat;
         position: relative;
       }
+      .menubar {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px 0 16px;
+        background: linear-gradient(
+          to bottom,
+          rgba(28, 28, 30, 0.72),
+          rgba(22, 22, 24, 0.55)
+        );
+        backdrop-filter: blur(28px) saturate(180%);
+        -webkit-backdrop-filter: blur(28px) saturate(180%);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 550;
+        letter-spacing: -0.01em;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+        z-index: 5;
+      }
+      .menubar-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .apple {
+        width: 14px;
+        height: 14px;
+        opacity: 0.95;
+      }
+      .menubar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mb-item {
+        display: inline-flex;
+        align-items: center;
+        height: 22px;
+        color: #fff;
+      }
+      .status-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 22px;
+        min-width: 28px;
+        padding: 0 7px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.16);
+        box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+      }
+      .status-btn svg {
+        display: block;
+      }
+      .clock {
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        padding-left: 2px;
+      }
       .popover {
         position: absolute;
-        top: 40px;
-        right: 72px;
+        top: 34px;
+        right: 52px;
         width: 300px;
         background: rgba(40, 40, 42, 0.94);
         backdrop-filter: blur(48px) saturate(180%);
@@ -37,6 +99,7 @@
           0 24px 64px rgba(0, 0, 0, 0.58);
         color: #fff;
         overflow: hidden;
+        z-index: 4;
       }
       .section {
         padding: 15px 16px 14px;
@@ -188,6 +251,42 @@
   </head>
   <body>
     <div class="stage">
+      <header class="menubar" aria-label="menu bar">
+        <div class="menubar-left">
+          <svg class="apple" viewBox="0 0 14 17" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M11.6 9.1c0-1.7 1.4-2.5 1.5-2.6-0.8-1.2-2.1-1.3-2.5-1.4-1.1-0.1-2.1 0.6-2.6 0.6-0.6 0-1.4-0.6-2.3-0.6-1.2 0-2.3 0.7-2.9 1.8-1.3 2.2-0.3 5.4 0.9 7.2 0.6 0.9 1.3 1.8 2.2 1.8 0.9 0 1.2-0.6 2.3-0.6s1.4 0.6 2.3 0.6c1 0 1.6-0.9 2.2-1.7 0.7-1 0.9-2 0.9-2 0 0-1.8-0.7-1.8-2.7zM9.7 3.6c0.5-0.6 0.8-1.4 0.7-2.2-0.7 0-1.6 0.5-2.1 1.1-0.5 0.5-0.9 1.4-0.8 2.2 0.8 0.1 1.6-0.4 2.2-1.1z"
+            />
+          </svg>
+          <span>Finder</span>
+          <span>File</span>
+          <span>Edit</span>
+          <span>View</span>
+          <span>Go</span>
+          <span>Window</span>
+          <span>Help</span>
+        </div>
+        <div class="menubar-right">
+          <span class="mb-item">62%</span>
+          <span class="mb-item" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <circle cx="7.5" cy="7.5" r="6.2" stroke="white" stroke-width="1.2" />
+              <path d="M7.5 1.3V13.7" stroke="white" stroke-width="1.2" />
+              <path d="M7.5 1.3a6.2 6.2 0 0 0 0 12.4Z" fill="white" />
+            </svg>
+          </span>
+          <span class="status-btn" title="ember" aria-label="ember">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="14" height="9" rx="1.4" stroke="white" stroke-width="1.2" />
+              <path d="M4 11.2h8" stroke="white" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M3.2 4.2h9.6" stroke="white" stroke-width="0.9" opacity="0.45" />
+            </svg>
+          </span>
+          <span class="mb-item clock">9:41</span>
+        </div>
+      </header>
+
       <div class="popover" id="popover">
         <div class="section">
           <div class="row">
