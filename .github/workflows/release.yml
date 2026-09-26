@@ -46,19 +46,15 @@ jobs:
           bun-version: 1.4.2
 
       - name: Validate release tag
-        run: |
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/validate-release-tag.sh
+        run: bash scripts/validate-release-tag.sh
 
       - name: Docs and hygiene
         run: |
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/check-docs.sh
+          bash scripts/check-docs.sh
+          flox activate -- bash scripts/check-hygiene.sh
 
       - name: Tests and web build
-        run: |
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/check-node.sh
+        run: bash scripts/check-node.sh
 
   build-macos:
     needs: preflight

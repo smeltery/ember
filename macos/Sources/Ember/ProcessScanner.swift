@@ -1,4 +1,3 @@
-#if os(macOS)
 import Foundation
 import EmberCore
 
@@ -46,4 +45,3 @@ enum ProcessScanner {
     return String(data: data, encoding: .utf8)
   }
 }
-#endif

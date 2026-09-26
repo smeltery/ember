@@ -1,4 +1,3 @@
-#if os(macOS)
 import Foundation
 
 /// Holds PreventUserIdleSystemSleep / system sleep via `caffeinate -is`.
@@ -41,4 +40,3 @@ final class CaffeinateController {
     process?.terminate()
   }
 }
-#endif

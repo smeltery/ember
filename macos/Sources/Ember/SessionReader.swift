@@ -1,4 +1,3 @@
-#if os(macOS)
 import Foundation
 import EmberCore
 
@@ -24,4 +23,3 @@ enum SessionReader {
     return sessions
   }
 }
-#endif

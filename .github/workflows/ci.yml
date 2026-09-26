@@ -35,19 +35,15 @@ jobs:
         with:
           bun-version: 1.4.2
 
-      - name: Activate flox (shellcheck + actionlint)
+      - name: Prove flox env activates
         run: flox activate -- true
 
       - name: Markdown and Mermaid
-        run: |
-          # Prefer setup-bun's 1.4.2 over whatever catalog bun flox may prepend.
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/check-docs.sh
+        # Use setup-bun's 1.4.2 directly; flox catalog bun may lag the lockfile.
+        run: bash scripts/check-docs.sh
 
       - name: Budgets, shellcheck, and actionlint
-        run: |
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/check-hygiene.sh
+        run: flox activate -- bash scripts/check-hygiene.sh
 
   verify:
     name: verify
@@ -67,10 +63,11 @@ jobs:
         with:
           bun-version: 1.4.2
 
+      - name: Prove flox env activates
+        run: flox activate -- true
+
       - name: Tests and web build
-        run: |
-          export PATH="$(dirname "$(command -v bun)"):$PATH"
-          flox activate -- bash scripts/check-node.sh
+        run: bash scripts/check-node.sh
 
   macos:
     name: macos

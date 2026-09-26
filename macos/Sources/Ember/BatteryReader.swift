@@ -1,4 +1,3 @@
-#if os(macOS)
 import Foundation
 import EmberCore
 
@@ -30,4 +29,3 @@ enum BatteryReader {
     return String(data: data, encoding: .utf8)
   }
 }
-#endif

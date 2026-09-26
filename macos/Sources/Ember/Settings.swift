@@ -1,4 +1,3 @@
-#if os(macOS)
 import Foundation
 import EmberCore
 
@@ -29,4 +28,3 @@ enum EmberSettings {
     )
   }
 }
-#endif

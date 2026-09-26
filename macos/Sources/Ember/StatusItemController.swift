@@ -1,4 +1,3 @@
-#if os(macOS)
 import AppKit
 import EmberCore
 
@@ -166,4 +165,3 @@ final class StatusItemController: NSObject {
     NSApp.terminate(nil)
   }
 }
-#endif

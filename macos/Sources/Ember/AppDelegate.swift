@@ -1,4 +1,3 @@
-#if os(macOS)
 import AppKit
 import EmberCore
 
@@ -15,4 +14,3 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     controller?.stop()
   }
 }
-#endif
