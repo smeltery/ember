@@ -1,0 +1,21 @@
+version = 1
+
+[install]
+bun.pkg-path = "bun"
+git.pkg-path = "git"
+gh.pkg-path = "gh"
+pre-commit.pkg-path = "pre-commit"
+actionlint.pkg-path = "actionlint"
+shellcheck.pkg-path = "shellcheck"
+python3.pkg-path = "python3"
+bash.pkg-path = "bash"
+jq.pkg-path = "jq"
+
+[hook]
+on-activate = '''
+  echo "ember: bun $(bun --version 2>/dev/null || echo n/a)"
+  echo "ember: flox ready — bun install && pre-commit install && bun run ci"
+'''
+
+[options]
+systems = ["aarch64-darwin", "x86_64-darwin", "aarch64-linux", "x86_64-linux"]

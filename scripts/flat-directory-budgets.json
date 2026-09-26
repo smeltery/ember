@@ -1,0 +1,13 @@
+{
+  "default_files": 20,
+  "directories": {
+    "apps/web/public/agents": {
+      "limit": 20,
+      "reason": "Agent brand icons from the marketing reference set"
+    },
+    "macos/Sources/Ember": {
+      "limit": 16,
+      "reason": "Menu bar app modules"
+    }
+  }
+}

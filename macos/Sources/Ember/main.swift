@@ -1,0 +1,14 @@
+#if os(macOS)
+import AppKit
+
+@main
+enum EmberMain {
+  static func main() {
+    let app = NSApplication.shared
+    app.setActivationPolicy(.accessory)
+    let delegate = AppDelegate()
+    app.delegate = delegate
+    app.run()
+  }
+}
+#endif
