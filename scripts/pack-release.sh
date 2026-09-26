@@ -13,10 +13,8 @@ bin="$(find macos/.build -type f -name Ember -perm -111 | head -1)"
 test -n "$bin"
 test -f "$bin"
 cp "$bin" "dist-release/ember-macos-arm64"
-(
-  cd apps/web
-  bun run build
-)
+bun install --frozen-lockfile
+bun run build
 tar -C apps/web/dist -czf "dist-release/ember-web-${version}.tar.gz" .
 (
   cd dist-release
