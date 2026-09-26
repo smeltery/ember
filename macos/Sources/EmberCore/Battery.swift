@@ -73,8 +73,17 @@ public func evaluateBattery(
 /// Parse `pmset -g batt` text into a snapshot (lowPowerMode left to caller).
 public func parsePmsetBattery(_ output: String, lowPowerMode: Bool = false) -> BatterySnapshot? {
   let lower = output.lowercased()
-  let plugged = lower.contains("ac power") || lower.contains("charging")
-    || lower.contains("charged")
+  let plugged: Bool
+  if lower.contains("ac power") {
+    plugged = true
+  } else if lower.contains("battery power") {
+    plugged = false
+  } else {
+    // Avoid matching the substring inside "discharging".
+    plugged = lower.contains(" charged")
+      || lower.contains("; charged")
+      || (lower.contains("charging") && !lower.contains("discharging"))
+  }
 
   // Match "80%" style.
   guard let percentRange = output.range(of: #"(\d+)\s*%"#, options: .regularExpression)

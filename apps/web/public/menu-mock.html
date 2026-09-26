@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ember menu mock</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .stage {
+        width: 1280px;
+        height: 720px;
+        background: #000 url("./wallpaper.jpg") center / cover no-repeat;
+        position: relative;
+      }
+      .popover {
+        position: absolute;
+        top: 40px;
+        right: 72px;
+        width: 300px;
+        background: rgba(40, 40, 42, 0.94);
+        backdrop-filter: blur(48px) saturate(180%);
+        -webkit-backdrop-filter: blur(48px) saturate(180%);
+        border-radius: 16px;
+        box-shadow:
+          0 0 0 0.5px rgba(255, 255, 255, 0.14),
+          0 24px 64px rgba(0, 0, 0, 0.58);
+        color: #fff;
+        overflow: hidden;
+      }
+      .section {
+        padding: 15px 16px 14px;
+      }
+      .meta .left {
+        color: #fff;
+      }
+      .section + .section {
+        border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .title {
+        font-size: 15px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .sub {
+        margin-top: 3px;
+        font-size: 12px;
+        color: rgba(235, 235, 245, 0.55);
+        font-variant-numeric: tabular-nums;
+      }
+      .toggle {
+        width: 42px;
+        height: 25px;
+        border-radius: 999px;
+        background: #0a84ff;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .heading {
+        font-size: 13px;
+        font-weight: 650;
+        margin-bottom: 8px;
+      }
+      .bar {
+        height: 7px;
+        border-radius: 999px;
+        background: rgba(120, 120, 128, 0.32);
+        overflow: hidden;
+      }
+      .bar > i {
+        display: block;
+        width: 58%;
+        height: 100%;
+        background: #30d158;
+        border-radius: inherit;
+      }
+      .meta {
+        margin-top: 7px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+      }
+      .meta .muted {
+        color: rgba(235, 235, 245, 0.55);
+      }
+      .agents-head {
+        margin-bottom: 10px;
+      }
+      .agents-head .muted {
+        font-size: 12px;
+        color: rgba(235, 235, 245, 0.55);
+        font-weight: 400;
+      }
+      .agent {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 28px;
+        margin-top: 8px;
+      }
+      .agent:first-of-type {
+        margin-top: 0;
+      }
+      .agent.idle {
+        color: rgba(235, 235, 245, 0.45);
+      }
+      .agent img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .agent .name {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .agent .state {
+        font-size: 12px;
+        color: rgba(235, 235, 245, 0.55);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #30d158;
+        box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.18);
+      }
+      .pills {
+        display: flex;
+        gap: 8px;
+      }
+      .pill {
+        border: 0;
+        background: rgba(120, 120, 128, 0.28);
+        color: #fff;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 550;
+        padding: 5px 11px;
+        border-radius: 8px;
+      }
+      .menu-item {
+        min-height: 28px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .menu-item + .menu-item {
+        margin-top: 6px;
+      }
+      .kbd {
+        color: rgba(235, 235, 245, 0.4);
+        font-size: 13px;
+        font-weight: 400;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <div class="popover" id="popover">
+        <div class="section">
+          <div class="row">
+            <div>
+              <div class="title">ember</div>
+              <div class="sub">Awake — lid-proof · 0h 13m</div>
+            </div>
+            <div class="toggle" aria-label="on"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="heading">Battery</div>
+          <div class="bar"><i></i></div>
+          <div class="meta">
+            <span class="left">58% left</span>
+            <span class="muted">stops below 15%</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="row agents-head">
+            <div class="heading" style="margin: 0">Agents</div>
+            <div class="muted">1 working</div>
+          </div>
+          <div class="agent">
+            <img src="./agents/agent-claude-code.svg" alt="" />
+            <div class="name">Claude Code</div>
+            <div class="state">1 session <span class="dot"></span></div>
+          </div>
+          <div class="agent idle">
+            <img src="./agents/agent-codex.png" alt="" />
+            <div class="name">ChatGPT / Codex</div>
+            <div class="state">idle</div>
+          </div>
+          <div class="agent idle">
+            <img src="./agents/agent-opencode.png" alt="" />
+            <div class="name">OpenCode</div>
+            <div class="state">idle</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="row">
+            <div class="heading" style="margin: 0">Pause</div>
+            <div class="pills">
+              <button class="pill" type="button">30 min</button>
+              <button class="pill" type="button">1 hour</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="row menu-item">
+            <span>Settings…</span>
+            <span class="kbd">⌘,</span>
+          </div>
+          <div class="row menu-item">
+            <span>Quit ember</span>
+            <span class="kbd">⌘Q</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

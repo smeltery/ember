@@ -3,6 +3,7 @@
   "files": {
     "apps/web/src/main.ts": 320,
     "apps/web/src/styles.css": 400,
-    "macos/Sources/Ember/StatusItemController.swift": 280
+    "macos/Sources/Ember/StatusItemController.swift": 280,
+    "macos/Sources/Ember/PopoverView.swift": 250
   }
 }
