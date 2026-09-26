@@ -5,6 +5,10 @@
       "limit": 20,
       "reason": "Agent brand icons from the marketing reference set"
     },
+    "docs/assets": {
+      "limit": 12,
+      "reason": "README and docs marketing images"
+    },
     "macos/Sources/Ember": {
       "limit": 16,
       "reason": "Menu bar app modules"

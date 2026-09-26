@@ -13,6 +13,10 @@
 Open-source keep-awake for macOS that holds sleep only while your AI coding
 agents are working — then lets the Mac rest again.
 
+<p align="center">
+  <img src="docs/assets/ember-menu.png" alt="ember menu bar: awake while agents work" width="720" />
+</p>
+
 ## Quick start
 
 ```bash
