@@ -1,182 +1,231 @@
 import "./styles.css";
 
-interface AgentLogo {
-  name: string;
-  src?: string;
-  mode: "hooks" | "process";
+const COPY =
+  "gh release download -R smeltery/ember -p ember-macos-arm64";
+
+const DEMO_MS = 2400;
+
+const DEMO_STEPS = [
+  {
+    key: "working",
+    lidOpen: true,
+    awake: true,
+    agent: "working",
+    title: "Your agent is working",
+    sub: "Claude Code is mid-task, lid open.",
+  },
+  {
+    key: "closed",
+    lidOpen: false,
+    awake: true,
+    agent: "working",
+    title: "You close the lid",
+    sub: "Laptop goes in the bag.",
+  },
+  {
+    key: "held",
+    lidOpen: false,
+    awake: true,
+    agent: "working",
+    emphasize: true,
+    title: "Mac stays awake",
+    sub: "ember holds the wake assertions.",
+  },
+  {
+    key: "done",
+    lidOpen: false,
+    awake: true,
+    agent: "idle",
+    title: "Agent finishes",
+    sub: "Idle for 30 seconds…",
+  },
+  {
+    key: "sleep",
+    lidOpen: false,
+    awake: false,
+    agent: "idle",
+    title: "Mac sleeps",
+    sub: "Assertions released. Battery saved.",
+  },
+] as const;
+
+function reveal() {
+  const nodes = document.querySelectorAll<HTMLElement>(".reveal, .reveal-hero");
+  const markDone = (node: HTMLElement) => {
+    node.classList.add("is-in", "is-done");
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const node = entry.target as HTMLElement;
+        node.classList.add("is-in");
+        const finish = () => markDone(node);
+        node.addEventListener("transitionend", finish, { once: true });
+        // Fallback if transitionend never fires (already visible / reduced motion).
+        window.setTimeout(finish, 800);
+        io.unobserve(node);
+      }
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+  );
+  for (const node of nodes) io.observe(node);
+  requestAnimationFrame(() => {
+    for (const node of document.querySelectorAll<HTMLElement>(
+      ".reveal, .reveal-hero",
+    )) {
+      if (node.getBoundingClientRect().top < window.innerHeight * 0.92) {
+        node.classList.add("is-in");
+        window.setTimeout(() => markDone(node), 800);
+      }
+    }
+  });
 }
 
-const AGENTS: AgentLogo[] = [
-  { name: "Claude Code", src: "/agents/agent-claude-code.svg", mode: "hooks" },
-  { name: "ChatGPT / Codex", src: "/agents/agent-codex.png", mode: "hooks" },
-  { name: "OpenCode", src: "/agents/agent-opencode.png", mode: "hooks" },
-  { name: "Gemini CLI", src: "/agents/agent-gemini.svg", mode: "hooks" },
-  { name: "Pi", src: "/agents/agent-pi.svg", mode: "hooks" },
-  { name: "Copilot CLI", src: "/agents/agent-copilot.svg", mode: "hooks" },
-  { name: "Hermes", src: "/agents/agent-hermes.png", mode: "hooks" },
-  { name: "Cursor", src: "/agents/agent-cursor-agent.png", mode: "process" },
-  { name: "Cline", src: "/agents/agent-cline.png", mode: "process" },
-  { name: "Warp", mode: "process" },
-  { name: "Aider", mode: "process" },
-  { name: "Windsurf", mode: "process" },
-  { name: "Continue", mode: "process" },
-  { name: "Amp", mode: "process" },
-  { name: "Goose", mode: "process" },
-];
-
-const FEATURES = [
-  {
-    title: "Agent-driven wake lock",
-    body: "Holds PreventUserIdleSystemSleep only while a watched agent is mid-task. Idle agents let the Mac sleep again.",
-  },
-  {
-    title: "Lifecycle hooks",
-    body: "Claude Code, Codex, OpenCode, Gemini, Pi, Copilot CLI, and Hermes report real Working / Idle state per session.",
-  },
-  {
-    title: "Process detection",
-    body: "Cursor, Cline, Warp, Aider, Windsurf, Continue, Amp, and Goose are watched by process name when hooks are not available.",
-  },
-  {
-    title: "Pause when you need it",
-    body: "One-click pause for 30 minutes or 1 hour from the menu bar, then ember resumes watching on its own.",
-  },
-];
-
-function agentMark(a: AgentLogo): string {
-  if (a.src) {
-    return `<img src="${a.src}" alt="" width="40" height="40" loading="lazy" />`;
+function wireCopy() {
+  for (const btn of document.querySelectorAll<HTMLButtonElement>(
+    'button[aria-label="Copy install command"]',
+  )) {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(COPY);
+        btn.dataset.copied = "1";
+        setTimeout(() => {
+          delete btn.dataset.copied;
+        }, 1600);
+      } catch {
+        /* ignore */
+      }
+    });
   }
-  const initial = a.name.slice(0, 1);
-  return `<span class="agent-mark" aria-hidden="true">${initial}</span>`;
 }
 
-function agentCells(): string {
-  return AGENTS.map(
-    (a, i) => `
-    <li class="agent" style="--i:${i}">
-      ${agentMark(a)}
-      <div>
-        <strong>${a.name}</strong>
-        <span>${a.mode === "hooks" ? "lifecycle hooks" : "process detection"}</span>
-      </div>
-    </li>`,
-  ).join("");
+function badgeLabel(step: (typeof DEMO_STEPS)[number]): string {
+  if (!step.awake) return "asleep";
+  return step.lidOpen ? "awake" : "awake · lid closed";
 }
 
-function featureCells(): string {
-  return FEATURES.map(
-    (f) => `
-    <li class="feature">
-      <h3>${f.title}</h3>
-      <p>${f.body}</p>
-    </li>`,
-  ).join("");
+function wireDemo() {
+  const root = document.querySelector<HTMLElement>("[data-demo-root]");
+  if (!root) return;
+
+  const badge = root.querySelector<HTMLElement>("[data-demo-badge]");
+  const badgeDot = root.querySelector<HTMLElement>("[data-demo-badge-dot]");
+  const badgeLabelEl = root.querySelector<HTMLElement>("[data-demo-badge-label]");
+  const lid = root.querySelector<HTMLElement>("[data-demo-lid]");
+  const screen = root.querySelector<HTMLElement>("[data-demo-screen]");
+  const hinge = root.querySelector<HTMLElement>("[data-demo-hinge]");
+  const pulse = root.querySelector<HTMLElement>("[data-demo-pulse]");
+  const zzz = root.querySelector<HTMLElement>("[data-demo-zzz]");
+  const copy = root.querySelector<HTMLElement>("[data-demo-copy]");
+  const agentPing = root.querySelector<HTMLElement>("[data-demo-agent-ping]");
+  const agentCore = root.querySelector<HTMLElement>("[data-demo-agent-core]");
+  const agentLabel = root.querySelector<HTMLElement>("[data-demo-agent-label]");
+  const title = root.querySelector<HTMLElement>("[data-demo-title]");
+  const sub = root.querySelector<HTMLElement>("[data-demo-sub]");
+  const bars = [
+    ...root.querySelectorAll<HTMLElement>(".demo-bar"),
+  ];
+
+  let index = 0;
+  let timer: ReturnType<typeof setInterval> | undefined;
+
+  const paint = (stepIndex: number) => {
+    const step = DEMO_STEPS[stepIndex];
+    if (!step) return;
+
+    if (badge && badgeDot && badgeLabelEl) {
+      badgeLabelEl.textContent = badgeLabel(step);
+      badge.classList.toggle("bg-accent-soft", step.awake);
+      badge.classList.toggle("text-accent", step.awake);
+      badge.classList.toggle("bg-black/[0.06]", !step.awake);
+      badge.classList.toggle("text-ink-3", !step.awake);
+      badge.classList.toggle("shadow-glow", Boolean(step.emphasize && step.awake));
+      badgeDot.classList.toggle("bg-accent", step.awake);
+      badgeDot.classList.toggle("bg-ink-3", !step.awake);
+    }
+
+    if (lid) lid.style.height = step.lidOpen ? "118px" : "13px";
+    if (screen) screen.style.opacity = step.lidOpen ? "1" : "0";
+    if (hinge) hinge.style.opacity = step.lidOpen ? "0" : "1";
+    if (pulse) {
+      pulse.classList.toggle("animate-pulse-ring", step.awake && !step.lidOpen);
+      pulse.style.opacity = step.awake && !step.lidOpen ? "1" : "0";
+    }
+    if (zzz) {
+      zzz.style.opacity = step.awake ? "0" : "1";
+      zzz.style.transform = step.awake ? "translateY(8px)" : "translateY(-6px)";
+    }
+
+    if (agentPing) agentPing.style.display = step.agent === "working" ? "" : "none";
+    if (agentCore) {
+      agentCore.classList.toggle("bg-accent", step.agent === "working");
+      agentCore.classList.toggle("bg-ink-3", step.agent !== "working");
+    }
+    if (agentLabel) {
+      agentLabel.textContent =
+        step.agent === "working" ? "agent working" : "agent idle";
+    }
+    if (title) title.textContent = step.title;
+    if (sub) sub.textContent = step.sub;
+    if (copy) {
+      copy.classList.remove("demo-copy-in");
+      // restart fade
+      void copy.offsetWidth;
+      copy.classList.add("demo-copy-in");
+    }
+
+    if (stepIndex === 0) {
+      for (const bar of bars) {
+        bar.style.transition = "none";
+        bar.style.width = "0%";
+      }
+      // Force reflow so the fill animation restarts on loop.
+      void root.offsetWidth;
+    }
+
+    for (let i = 0; i < bars.length; i++) {
+      const bar = bars[i];
+      if (!bar) continue;
+      const fill = i <= stepIndex;
+      bar.style.transition =
+        i === stepIndex ? `width ${DEMO_MS}ms linear` : "width 0.3s ease";
+      bar.style.width = fill ? "100%" : "0%";
+    }
+  };
+
+  const start = () => {
+    if (timer) return;
+    paint(0);
+    timer = setInterval(() => {
+      index = (index + 1) % DEMO_STEPS.length;
+      paint(index);
+    }, DEMO_MS);
+  };
+
+  const stop = () => {
+    if (!timer) return;
+    clearInterval(timer);
+    timer = undefined;
+  };
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) start();
+        else stop();
+      }
+    },
+    { rootMargin: "-20% 0px -20% 0px", threshold: 0 },
+  );
+  io.observe(root);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    paint(0);
+    return;
+  }
 }
 
-const app = document.querySelector<HTMLDivElement>("#app");
-if (!app) throw new Error("#app missing");
-
-app.innerHTML = `
-  <header class="top">
-    <a class="brand-mini" href="#top" aria-label="ember home">
-      <img src="/icon.png" alt="" width="28" height="28" />
-      <span>ember</span>
-    </a>
-    <nav>
-      <a href="#features">Features</a>
-      <a href="#agents">Agents</a>
-      <a href="#docs">Docs</a>
-      <a class="nav-cta" href="#download">Download</a>
-    </nav>
-  </header>
-
-  <main id="top">
-    <section class="hero" aria-label="ember">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-veil" aria-hidden="true"></div>
-      <div class="hero-copy">
-        <p class="brand">ember</p>
-        <h1>Close the lid. Keep coding.</h1>
-        <p class="lede">
-          Your agents finish the job with the lid shut — ember holds the Mac awake
-          only while they work, then lets sleep return.
-        </p>
-        <div class="cta">
-          <a class="btn primary" href="#download">Download</a>
-          <a class="btn ghost" href="#docs">Docs</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="section">
-      <h2>Built for agents, not babysitting</h2>
-      <p class="section-lede">
-        A menu-bar keep-awake that understands Working versus Idle — so you can
-        close the lid and walk away.
-      </p>
-      <ul class="features">${featureCells()}</ul>
-    </section>
-
-    <section id="agents" class="section section-alt">
-      <h2>Watches the agents you already use</h2>
-      <p class="section-lede">
-        Hooks where the tool exposes them. Process detection where it does not.
-      </p>
-      <ul class="agents">${agentCells()}</ul>
-    </section>
-
-    <section id="battery" class="section">
-      <h2>Battery guardrails, not runaway drain</h2>
-      <p class="section-lede">
-        Configurable cut-off (default 15%), optional plugged-in-only mode,
-        respect for Low Power Mode, and display-off while agents run.
-      </p>
-      <ul class="bullets">
-        <li>Stops holding wake below your threshold</li>
-        <li>Optional: only when charging</li>
-        <li>Honors macOS Low Power Mode</li>
-        <li>Display can sleep while work continues</li>
-      </ul>
-    </section>
-
-    <section id="caffeine" class="section section-alt">
-      <h2>Not another manual caffeine toggle</h2>
-      <p class="section-lede">
-        Caffeine and Amphetamine keep the Mac awake while you leave them on or
-        while a process exists. ember reads agent lifecycle signals, holds
-        PreventUserIdleSystemSleep only mid-task, and releases automatically
-        when work finishes — including with the lid closed.
-      </p>
-    </section>
-
-    <section id="privacy" class="section">
-      <h2>Local only. Your code stays yours.</h2>
-      <p class="section-lede">
-        ember never reads your prompts, terminal output, or source. It only
-        receives Working / Idle hook signals and talks to macOS power APIs on
-        your machine.
-      </p>
-    </section>
-
-    <section id="download" class="section section-cta">
-      <h2>Stop babysitting your laptop</h2>
-      <p class="section-lede">
-        Close the lid, walk away, and let your agents finish. ember handles the rest.
-      </p>
-      <div class="cta">
-        <a class="btn primary" href="https://github.com/smeltery/ember/releases">Download for macOS</a>
-        <a class="btn ghost" id="docs" href="https://github.com/smeltery/ember">Docs on GitHub</a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="foot">
-    <span>ember — open source</span>
-    <a href="https://github.com/smeltery/ember">GitHub</a>
-  </footer>
-`;
-
-requestAnimationFrame(() => {
-  document.body.classList.add("ready");
-});
+reveal();
+wireCopy();
+wireDemo();
